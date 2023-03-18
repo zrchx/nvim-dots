@@ -50,7 +50,7 @@ o.tabstop = 2
 -- Visual
 o.cursorline = true
 o.showmode = false
-vim.opt.termguicolors = true
+o.termguicolors = true
 c.colorscheme "tokyonight-night"
 
 o.splitbelow = true

@@ -81,6 +81,46 @@ local lsp_lua_config = {
     },
   },
 }
+
+local lsp_cpp_config = {
+  on_attach = attach_lsp,
+  capabilities = cap_lsp,
+  settings ={
+    Lua = {
+      diagnostics = {
+        globals = { "vim" },
+      },
+      workspace = {
+        library = {
+          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+        },
+      maxPreload = 100000,
+      preloadFileSize = 10000,
+      },
+    },
+  },
+}
+
+local lsp_md_config = {
+  on_attach = attach_lsp,
+  capabilities = cap_lsp,
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "vim" },
+      },
+      workspace = {
+        library = {
+          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
+        },
+        maxPreload = 100000,
+        preloadFileSize = 10000,
+      },
+    },
+  },
+}
 -- Mason
 local mason_opt = {
   ensure_installed = { "lua-language-server" },
@@ -106,4 +146,6 @@ local mason_opt = {
 }
 -- Configs Call --
 require('mason').setup(mason_opt)
+require('lspconfig').marksman.setup(lsp_md_config)
+require('lspconfig').clangd.setup(lsp_cpp_config)
 require('lspconfig').lua_ls.setup(lsp_lua_config)

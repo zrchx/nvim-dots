@@ -1,7 +1,6 @@
 -- Plugins Config --
 -- cmp
 local cmp = require'cmp'
-
 local function border(hl_name)
   return {
     { "╭", hl_name },
@@ -14,7 +13,6 @@ local function border(hl_name)
     { "│", hl_name },
   }
 end
-
 local cmp_opt = {
   window = {
     completion = {
@@ -28,19 +26,17 @@ local cmp_opt = {
       require('luasnip').lsp_expand(args.body)
     end,
   },
-  mapping = cmp.mapping.preset.insert({
+  mapping = {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-n>"] = cmp.mapping.select_next_item(),
-    
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    
     ["<C-Space>"] = cmp.mapping.complete(),
-    
     ["<C-e>"] = cmp.mapping.close(),
-    
-    ["<CR>"] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
-    
+    ["<CR>"] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = false,
+    },
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -53,7 +49,6 @@ local cmp_opt = {
       "i",
       "s",
     }),
-    
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -66,7 +61,7 @@ local cmp_opt = {
       "i",
       "s",
     }),
-  }),
+  },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
@@ -80,9 +75,8 @@ local luasnip_opt = {
   history = true,
   updateevents = "TextChanged,TextChangedI",
 }
-  
 vim.api.nvim_create_autocmd("InsertLeave", {
-  callback = function() 
+  callback = function()
     if require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
       and not require("luasnip").session.jump_active
     then
