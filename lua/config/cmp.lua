@@ -1,6 +1,7 @@
 -- Plugins Config --
 -- cmp
 local cmp = require'cmp'
+
 local function border(hl_name)
   return {
     { "╭", hl_name },
@@ -13,13 +14,17 @@ local function border(hl_name)
     { "│", hl_name },
   }
 end
-local cmp_opt = {
+
+local options = {
+  completion ={
+    completeopt = "menu,menuone",
+  },
   window = {
     completion = {
-      border = border "CmpBorder",
-      winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
+      winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
+      scrollbar = false,
     },
-    documentation = { border = border "CmpDocBorder" },
+    documentation = { border = border "CmpDocBorder", winhighlight = "Normal:CmpDoc" },
   },
   snippet = {
     expand = function(args)
@@ -63,28 +68,11 @@ local cmp_opt = {
     }),
   },
   sources = {
-    { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'nvim_lsp' },
     { name = 'buffer' },
     { name = "nvim_lua" },
     { name = "path" },
   }
 }
--- LuaSnip
-local luasnip_opt = {
-  history = true,
-  updateevents = "TextChanged,TextChangedI",
-}
-vim.api.nvim_create_autocmd("InsertLeave", {
-  callback = function()
-    if require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
-      and not require("luasnip").session.jump_active
-    then
-      require("luasnip").unlink_current()
-    end
-	end,
-})
--- Configs Call --
-require('luasnip').config.set_config(luasnip_opt)
-require("luasnip.loaders.from_vscode").lazy_load()
-require('cmp').setup(cmp_opt)
+return options

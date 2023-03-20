@@ -3,24 +3,25 @@
 local o = vim.opt
 local c = vim.cmd
 local g = vim.g
+local fn = vim.fn
 -- ====================================
 
 -- ====================================
--- Archives --
--- Packer
+-- Bootstrap --
+local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    lazypath,
+  })
+end
+o.rtp:prepend(lazypath)
+-- Configs --
 require'plugins'
--- Some plugins Configs
-require'config.misc'
--- CMP config
-require'config.cmp'
--- Visual config
-require'config.visual'
--- LSP config
-require'config.lspconf'
--- Files and bar config
-require'config.nvimtree'
--- Statusbar config
-require'config.statusbar'
 -- ====================================
 
 -- ====================================
@@ -51,6 +52,7 @@ o.tabstop = 2
 o.cursorline = true
 o.showmode = false
 o.termguicolors = true
+-- Color theme
 c.colorscheme "tokyonight-night"
 
 o.splitbelow = true
@@ -59,45 +61,16 @@ o.splitright = false
 o.laststatus = 3
 
 -- Numbers
-o.ruler = true
+o.ruler = false
 o.number = true
 o.numberwidth = 2
 
--- Disable plugins
-local default_plugins = {
-  "2html_plugin",
-  "getscript",
-  "getscriptPlugin",
-  "gzip",
-  "logipat",
-  "netrw",
-  "netrwPlugin",
-  "netrwSettings",
-  "netrwFileHandlers",
-  "matchit",
-  "tar",
-  "tarPlugin",
-  "rrhelper",
-  "spellfile_plugin",
-  "vimball",
-  "vimballPlugin",
-  "zip",
-  "zipPlugin",
-  "tutor",
-  "rplugin",
-  "syntax",
-  "synmenu",
-  "optwin",
-  "compiler",
-  "bugreport",
-  "ftplugin",
-}
-
-for _, plugin in pairs(default_plugins) do
-  g["loaded_" .. plugin] = 1
+-- Disable some things
+for _, provider in ipairs { "node", "perl", "python3", "ruby" } do
+  g["loaded_" .. provider .. "_provider"] = 0
 end
 
 -- LSP path to binaries
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. vim.fn.stdpath "data" .. "/mason/bin"
+vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. fn.stdpath "data" .. "/mason/bin"
 -- ====================================

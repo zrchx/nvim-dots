@@ -1,5 +1,5 @@
 -- Nvim Tree --
-local config = {
+local options = {
   filters = {
     dotfiles = false,
   },
@@ -68,5 +68,5 @@ local config = {
     },
   },
 }
--- Configs Call --
-require('nvim-tree').setup(config)
+vim.g.nvimtree_side = options.view.side
+return options

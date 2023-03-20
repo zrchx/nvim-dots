@@ -1,5 +1,4 @@
 -- Plugins Config --
--- LSP
 local function lspSymbol(name, icon)
   local hl = "DiagnosticSign" .. name
   vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
@@ -38,10 +37,10 @@ vim.notify = function(msg, log_level)
     vim.api.nvim_echo({ { msg } }, true, {})
   end
 end
-
 require('lspconfig.ui.windows').default_options.border = 'single'
-
-local cap_lsp ={
+-- LSP
+local v = {}
+v.cap_lsp ={
   documentationFormat = { "markdown", "plaintext" },
   snippetSupport = true,
   preselectSupport = true,
@@ -58,13 +57,14 @@ local cap_lsp ={
     },
   },
 }
-local attach_lsp = function(client, bufnr)
+v.attach_lsp = function(client, bufnr)
   client.server_capabilities.documentFormattingProvider = false
   client.server_capabilities.documentRangeFormattingProvider = false
 end
-local lsp_lua_config = {
-  on_attach = attach_lsp,
-  capabilities = cap_lsp,
+
+require('lspconfig').lua_ls.setup {
+  on_attach = v.attach_lsp,
+  capabilities = v.cap_lsp,
   settings = {
     Lua = {
       diagnostics = {
@@ -82,9 +82,9 @@ local lsp_lua_config = {
   },
 }
 
-local lsp_cpp_config = {
-  on_attach = attach_lsp,
-  capabilities = cap_lsp,
+require('lspconfig').clangd.setup {
+  on_attach = v.attach_lsp,
+  capabilities = v.cap_lsp,
   settings ={
     Lua = {
       diagnostics = {
@@ -102,9 +102,9 @@ local lsp_cpp_config = {
   },
 }
 
-local lsp_md_config = {
-  on_attach = attach_lsp,
-  capabilities = cap_lsp,
+require('lspconfig').marksman.setup {
+  on_attach = v.attach_lsp,
+  capabilities = v.cap_lsp,
   settings = {
     Lua = {
       diagnostics = {
@@ -121,31 +121,4 @@ local lsp_md_config = {
     },
   },
 }
--- Mason
-local mason_opt = {
-  ensure_installed = { "lua-language-server" },
-  PATH = "skip",
-  ui = {
-    icons = {
-      package_pending = " ",
-      package_installed = " ",
-      package_uninstalled = " ﮊ",
-    },
-    keymaps = {
-      toggle_server_expand = "<CR>",
-      install_server = "i",
-      update_server = "u",
-      check_server_version = "c",
-      update_all_servers = "U",
-      check_outdated_servers = "C",
-      uninstall_server = "X",
-      cancel_installation = "<C-c>",
-    },
-  },
-  max_concurrent_installers = 10,
-}
--- Configs Call --
-require('mason').setup(mason_opt)
-require('lspconfig').marksman.setup(lsp_md_config)
-require('lspconfig').clangd.setup(lsp_cpp_config)
-require('lspconfig').lua_ls.setup(lsp_lua_config)
+return v
