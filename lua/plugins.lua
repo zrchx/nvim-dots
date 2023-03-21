@@ -51,7 +51,7 @@ local plugins = {
       },
     },
     opts = function ()
-      return require'config.cmp'
+      return require'config.completions'
     end,
     config = function (_, opts)
         require('cmp').setup(opts)
@@ -78,6 +78,21 @@ local plugins = {
   -- =======================================
 
   -- =======================================
+  -- Blankline
+  { 'lukas-reineke/indent-blankline.nvim',
+    init = function()
+      require('utils').lazy_load "indent-blankline.nvim"
+    end,
+    opts = function()
+      return require'config.misc'.blankline
+    end,
+    config = function(_, opts)
+      require('indent_blankline').setup(opts)
+    end,
+  },
+  -- =======================================
+
+  -- =======================================
   -- Icons
   { "nvim-tree/nvim-web-devicons",
     config = function(_, opts)
@@ -91,7 +106,7 @@ local plugins = {
   { 'nvim-tree/nvim-tree.lua',
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     opts = function()
-      return require 'config.nvimtree'
+      return require 'config.utils'.nvimtree
     end,
     config = function(_, opts)
       require('nvim-tree').setup(opts)
@@ -145,7 +160,7 @@ local plugins = {
   {'nvim-lualine/lualine.nvim',
     lazy = false,
     opts = function ()
-      return require'config.lualine'
+      return require'config.utils'.lualine.options
     end,
     config = function (_, opts)
       require('lualine').setup(opts)

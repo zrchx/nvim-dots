@@ -25,7 +25,7 @@ v.bufferline = {
     offsets = {
       {
         filetype = "NvimTree",
-        text = "File Explorer",
+        text = " File Explorer",
         text_align = "center",
       },
     },
@@ -39,16 +39,16 @@ v.bufferline = {
 -- Colorizer --
 v.colorizer = {
   filetypes = { "*" },
-    user_default_options = {
-      RGB = true,
-      RRGGBB = true,
-      names = false,
-      RRGGBBAA = true,
-      AARRGGBB = false,
-      mode = "background",
-      virtualtext = "■",
-      always_update = false
-    },
   buftypes = {},
+  user_default_options = {
+    RGB = true,
+    RRGGBB = true,
+    names = false,
+    RRGGBBAA = true,
+    AARRGGBB = false,
+    mode = "background",
+    virtualtext = "■",
+    always_update = false
+  },
 }
 return v
