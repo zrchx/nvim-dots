@@ -6,7 +6,7 @@ local plugins = {
   -- =======================================
   -- LSP
   { 'neovim/nvim-lspconfig',
-    init = require('utils').lazy_load 'nvim-lspconfig',
+    init = require('utils').lazy_load "nvim-lspconfig",
     config = function ()
       require'config.lspconf'
     end,

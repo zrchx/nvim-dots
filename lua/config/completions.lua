@@ -16,12 +16,10 @@ local function border(hl_name)
 end
 
 local options = {
-  completion ={
-    completeopt = "menu,menuone",
-  },
   window = {
     completion = {
-      winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
+      border = border "CmpBorder",
+      winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
       scrollbar = false,
     },
     documentation = { border = border "CmpDocBorder", winhighlight = "Normal:CmpDoc" },
