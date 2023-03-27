@@ -4,6 +4,15 @@ local plugins = {
   -- =======================================
 
   -- =======================================
+  -- Snap
+  { 'camspiers/snap',
+    config = function ()
+      require'config.utils'.snap()
+    end
+  },
+  -- =======================================
+
+  -- =======================================
   -- LSP
   { 'neovim/nvim-lspconfig',
     init = require('utils').lazy_load "nvim-lspconfig",
@@ -89,6 +98,18 @@ local plugins = {
     config = function(_, opts)
       require('indent_blankline').setup(opts)
     end,
+  },
+  -- =======================================
+
+  -- =======================================
+  -- Specs
+  { 'edluffy/specs.nvim',
+    opts = function ()
+      return require'config.visual'.specs
+    end,
+    config = function (_, opts)
+      require('specs').setup(opts)
+    end
   },
   -- =======================================
 

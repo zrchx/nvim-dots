@@ -138,4 +138,19 @@ u.lualine = {
     },
   }
 }
+u.snap =function ()
+  local snap = require'snap'
+  snap.config.file {
+    reverse = true,
+    prompt = " Files",
+    suffix = "",
+    consumer = "fzf"
+  }
+  snap.run {
+    producer = snap.get'consumer.fzf'(snap.get'producer.ripgrep.file'),
+    select = snap.get'select.file'.select,
+    multiselect = snap.get'select.file'.multiselect,
+    views = {snap.get'preview.file'}
+  }
+end
 return u
