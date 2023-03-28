@@ -4,7 +4,6 @@ local v = {}
 v.tokyonight = {
   style = "night",
   light_style = "moon",
-  transparent = true,
   terminal_colors = true,
   styles = {
     sidebars = "dark",
@@ -51,20 +50,17 @@ v.colorizer = {
     always_update = false
   },
 }
--- Line mark
 v.specs = {
   show_jumps  = true,
-  min_jump = 30,
+  min_jump = 25,
   popup = {
-    delay_ms = 0, -- delay before popup displays
-    inc_ms = 10, -- time increments used for fade/resize effects 
-    blend = 10, -- starting blend, between 0-100 (fully transparent), see :h winblend
-    width = 10,
-    winhl = "PMenu",
+    delay_ms = 0,
+    inc_ms = 25,
+    blend = 15,
+    width = 55,
     fader = require('specs').pulse_fader,
     resizer = require('specs').slide_resizer
-  },
-  ignore_filetypes = { },
-  ignore_buftypes = { },
+    },
+  ignore_filetypes = { "NvimTree" }
 }
 return v

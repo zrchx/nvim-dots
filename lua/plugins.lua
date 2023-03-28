@@ -1,21 +1,40 @@
+-- Lazy load
+local lazy_load = function(plugin)
+  vim.api.nvim_create_autocmd({ "BufRead", "BufWinEnter", "BufNewFile" }, {
+    group = vim.api.nvim_create_augroup("BeLazyOnFileOpen" .. plugin, {}),
+    callback = function()
+      local file = vim.fn.expand "%"
+      local condition = file ~= "NvimTree_1" and file ~= "[lazy]" and file ~= ""
+      if condition then
+        vim.api.nvim_del_augroup_by_name("BeLazyOnFileOpen" .. plugin)
+        if plugin ~= "nvim-treesitter" then
+          vim.schedule(function()
+            require("lazy").load { plugins = plugin }
+            if plugin == "nvim-lspconfig" then
+              vim.cmd "silent! do FileType"
+            end
+          end, 0)
+        else
+          require("lazy").load { plugins = plugin }
+        end
+      end
+    end,
+  })
+end
+-- List of plugins
 local plugins = {
   -- =======================================
   -- Utils --
   -- =======================================
 
   -- =======================================
-  -- Snap
-  { 'camspiers/snap',
-    config = function ()
-      require'config.utils'.snap()
-    end
-  },
+  -- (file finder)
   -- =======================================
 
   -- =======================================
   -- LSP
   { 'neovim/nvim-lspconfig',
-    init = require('utils').lazy_load "nvim-lspconfig",
+    init = lazy_load "nvim-lspconfig",
     config = function ()
       require'config.lspconf'
     end,
@@ -71,7 +90,7 @@ local plugins = {
   -- =======================================
   -- Treesitter
   { 'nvim-treesitter/nvim-treesitter',
-    init = require('utils').lazy_load "nvim-treesitter",
+    init = lazy_load "nvim-treesitter",
     opts =function ()
       return require'config.misc'.treesitter
     end,
@@ -90,7 +109,7 @@ local plugins = {
   -- Blankline
   { 'lukas-reineke/indent-blankline.nvim',
     init = function()
-      require('utils').lazy_load "indent-blankline.nvim"
+      lazy_load "indent-blankline.nvim"
     end,
     opts = function()
       return require'config.misc'.blankline
@@ -104,6 +123,7 @@ local plugins = {
   -- =======================================
   -- Specs
   { 'edluffy/specs.nvim',
+    lazy = false,
     opts = function ()
       return require'config.visual'.specs
     end,
@@ -117,7 +137,7 @@ local plugins = {
   -- Icons
   { "nvim-tree/nvim-web-devicons",
     config = function(_, opts)
-      require("nvim-web-devicons").setup(opts)
+      require('nvim-web-devicons').setup(opts)
     end,
   },
   -- =======================================
@@ -127,7 +147,7 @@ local plugins = {
   { 'nvim-tree/nvim-tree.lua',
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     opts = function()
-      return require 'config.utils'.nvimtree
+      return require 'config.nvimtree'
     end,
     config = function(_, opts)
       require('nvim-tree').setup(opts)
@@ -150,7 +170,7 @@ local plugins = {
   -- =======================================
   -- Colorizer
   { 'NvChad/nvim-colorizer.lua',
-    init = require('utils').lazy_load "nvim-colorizer.lua",
+    init = lazy_load "nvim-colorizer.lua",
     opts = function ()
       return require'config.visual'.colorizer
     end,
@@ -181,7 +201,7 @@ local plugins = {
   {'nvim-lualine/lualine.nvim',
     lazy = false,
     opts = function ()
-      return require'config.utils'.lualine.options
+      return require'config.tabsline'
     end,
     config = function (_, opts)
       require('lualine').setup(opts)

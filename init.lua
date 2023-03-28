@@ -22,6 +22,7 @@ end
 o.rtp:prepend(lazypath)
 -- Configs --
 require'plugins'
+require'keymaps'
 -- ====================================
 
 -- ====================================
@@ -33,6 +34,17 @@ o.whichwrap:append "<>[]hl"
 
 o.timeoutlen = 400
 o.updatetime = 250
+g.transparency = 0.9
+
+o.breakindent = true
+o.undofile = true
+
+o.clipboard = "unnamedplus"
+
+-- Keys
+vim.api.nvim_set_keymap("", "<Space>", "<Nop>", { noremap = true, silent = true })
+g.mapleader = " "
+g.maplocalleader = " "
 
 -- Mouse
 o.mouse = "a"
