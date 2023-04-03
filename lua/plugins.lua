@@ -28,10 +28,6 @@ local plugins = {
   -- =======================================
 
   -- =======================================
-  -- (file finder)
-  -- =======================================
-
-  -- =======================================
   -- LSP
   { 'neovim/nvim-lspconfig',
     init = lazy_load "nvim-lspconfig",
@@ -40,6 +36,7 @@ local plugins = {
     end,
   },
   { 'williamboman/mason.nvim',
+    cmd = {"Mason", "MasonInstall", "MasonUninstall"},
     opts = function ()
       return require'config.misc'.mason
     end,
@@ -119,20 +116,7 @@ local plugins = {
     end,
   },
   -- =======================================
-
-  -- =======================================
-  -- Specs
-  { 'edluffy/specs.nvim',
-    lazy = false,
-    opts = function ()
-      return require'config.visual'.specs
-    end,
-    config = function (_, opts)
-      require('specs').setup(opts)
-    end
-  },
-  -- =======================================
-
+  
   -- =======================================
   -- Icons
   { "nvim-tree/nvim-web-devicons",

@@ -50,17 +50,4 @@ v.colorizer = {
     always_update = false
   },
 }
-v.specs = {
-  show_jumps  = true,
-  min_jump = 25,
-  popup = {
-    delay_ms = 0,
-    inc_ms = 25,
-    blend = 15,
-    width = 55,
-    fader = require('specs').pulse_fader,
-    resizer = require('specs').slide_resizer
-    },
-  ignore_filetypes = { "NvimTree" }
-}
 return v
