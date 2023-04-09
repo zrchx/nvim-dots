@@ -1,4 +1,6 @@
--- Lualine --
+-- ====================================
+--          plugins config           --
+-- ====================================
 local options = {
     icons_enabled = true,
     theme = 'tokyonight',
@@ -33,7 +35,7 @@ local options = {
       },
       lualine_y = {
         { function()
-          local msg = 'No Active Lsp'
+          local msg = 'NLS'
           local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
           local clients = vim.lsp.get_active_clients()
           if next(clients) == nil then
@@ -47,7 +49,7 @@ local options = {
             end
           return msg
         end,
-        icon = '  ~',
+        icon = ' ',
         separator = { left = '', right = '' }
         },
         { 'filetype', colored = true , icon_only = true, separator = { left = '', right = '' } }

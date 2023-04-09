@@ -1,4 +1,6 @@
--- Plugins Config --
+-- ====================================
+--          plugins config           --
+-- ====================================
 local v = {}
 -- Color theme
 v.tokyonight = {

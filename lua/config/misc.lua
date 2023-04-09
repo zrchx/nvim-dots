@@ -1,4 +1,6 @@
--- Plugins Config --
+-- ====================================
+--          plugins config           --
+-- ====================================
 local ms = {}
 ms.lazy_nvim = {
   defaults = { lazy = true },

@@ -1,4 +1,6 @@
--- Plugins Config --
+-- ====================================
+--          plugins config           --
+-- ====================================
 local function lspSymbol(name, icon)
   local hl = "DiagnosticSign" .. name
   vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
@@ -102,7 +104,7 @@ require('lspconfig').clangd.setup {
   },
 }
 
-require('lspconfig').marksman.setup {
+require('lspconfig').bashls.setup {
   on_attach = v.attach_lsp,
   capabilities = v.cap_lsp,
   settings = {

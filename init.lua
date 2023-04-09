@@ -41,11 +41,6 @@ o.undofile = true
 
 o.clipboard = "unnamedplus"
 
--- Keys
-vim.api.nvim_set_keymap("", "<Space>", "<Nop>", { noremap = true, silent = true })
-g.mapleader = " "
-g.maplocalleader = " "
-
 -- Mouse
 o.mouse = "a"
 o.mousemoveevent = true
@@ -67,8 +62,8 @@ o.termguicolors = true
 -- Color theme
 c.colorscheme "tokyonight-night"
 
-o.splitbelow = true
-o.splitright = false
+o.splitbelow = false
+o.splitright = true
 
 o.laststatus = 3
 
@@ -79,7 +74,7 @@ o.numberwidth = 2
 
 -- Disable some things
 for _, provider in ipairs { "node", "perl", "python3", "ruby" } do
-  g["loaded_" .. provider .. "_provider"] = 0
+    g["loaded_" .. provider .. "_provider"] = 0
 end
 
 -- LSP path to binaries

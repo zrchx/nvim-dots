@@ -1,3 +1,6 @@
+-- ====================================
+--          plugins config           --
+-- ====================================
 local options = {
   filters = {
     dotfiles = false,
@@ -11,8 +14,8 @@ local options = {
   },
   view = {
     adaptive_size = true,
-    side = "left",
-    width = 25,
+    side = "right",
+    width = 28,
     hide_root_folder = true,
   },
   git = {
@@ -30,7 +33,6 @@ local options = {
   renderer = {
     highlight_git = false,
     highlight_opened_files = "none",
-
     indent_markers = {
       enable = false,
     },
@@ -53,15 +55,6 @@ local options = {
           symlink_open = "",
           arrow_open = "",
           arrow_closed = "",
-        },
-        git = {
-          unstaged = " ",
-          staged = " ",
-          unmerged = "",
-          renamed = " ",
-          untracked = "社",
-          deleted = " ",
-          ignored = "",
         },
       },
     },

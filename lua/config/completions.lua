@@ -1,6 +1,36 @@
--- Plugins Config --
--- cmp
+-- ====================================
+--          plugins config           --
+-- ====================================
+-- CMP --
 local cmp = require'cmp'
+
+local icons = {
+  Text = ' ',
+  Method = '柳',
+  Function = '柳',
+  Constructor = '柳',
+  Field = ' ',
+  Variable = ' ',
+  Class = ' ',
+  Interface = ' ',
+  Module = ' ',
+  Property = ' ',
+  Unit = ' ',
+  Value = ' ',
+  Enum = ' ',
+  Keyword = ' ',
+  Snippet = ' ',
+  Color = ' ',
+  File = '',
+  Reference = '',
+  Folder = ' ',
+  EnumMember = ' ',
+  Constant = ' ',
+  Struct = ' ',
+  Event = '',
+  Operator = ' ',
+  TypeParameter = ' ',
+}
 
 local function border(hl_name)
   return {
@@ -23,6 +53,12 @@ local options = {
       scrollbar = false,
     },
     documentation = { border = border "CmpDocBorder", winhighlight = "Normal:CmpDoc" },
+  },
+  formatting = {
+    format = function(_, vim_item)
+      vim_item.kind = (icons[vim_item.kind] or '') .. vim_item.kind
+      return vim_item
+    end,
   },
   snippet = {
     expand = function(args)
@@ -66,8 +102,8 @@ local options = {
     }),
   },
   sources = {
-    { name = 'luasnip' },
     { name = 'nvim_lsp' },
+    { name = 'luasnip' },
     { name = 'buffer' },
     { name = "nvim_lua" },
     { name = "path" },
