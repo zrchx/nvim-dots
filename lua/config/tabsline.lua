@@ -31,7 +31,7 @@ local options = {
         { 'diff', colored = true, symbols = { added = ' ', modified = '', removed = ' '}, separator = { left = '', right = '' }}
       },
       lualine_x = {
-        { 'diagnostics', sources = { 'nvim_lsp' }, symbols = { error = ' ', warn = ' ', info = ' ', Hint = ' ' }, separator = { left = '', right = '' } }
+        { 'diagnostics', sources = { 'nvim_lsp' }, symbols = { error = ' ', warn = ' ', info = ' ', Hint = ' ' }, separator = { left = '', right = '' } }
       },
       lualine_y = {
         { function()
@@ -52,10 +52,10 @@ local options = {
         icon = ' ',
         separator = { left = '', right = '' }
         },
-        { 'filetype', colored = true , icon_only = true, separator = { left = '', right = '' } }
+        { 'filetype', colored = true , icon_only = true, separator = { left = '', right = '' } }
       },
       lualine_z = {
-        {'progress', icons_enabled = true, icon = { "" }, separator = { left = '', right = '' }},
+        {'location', icons_enabled = true, icon = { "" }, separator = { left = '', right = '' }},
       }
     },
     inactive_sections = {

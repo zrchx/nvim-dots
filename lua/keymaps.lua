@@ -1,19 +1,11 @@
 --=====================================
 -- Aliases --
-local g = vim.g
 local key = vim.api.nvim_set_keymap
 local dopts = { noremap = true, silent = true }
 --=====================================
 
 --=====================================
--- Leader key
-key("", "<Space>", "<Nop>", dopts)
-g.mapleader = " "
-g.maplocalleader = " "
---=====================================
-
---=====================================
--- ReMap default keys
+-- Remap default keys
 
 --=====================================
 
@@ -21,6 +13,18 @@ g.maplocalleader = " "
 -- Switch bufferline
 key("n", "<S-h>", ":BufferLineCycleNext<CR>", dopts)
 key("n", "<S-l>", ":BufferLineCyclePrev<CR>", dopts)
+--=====================================
+
+--=====================================
+-- Open Terminal
+key("n", "<S-t>", ":terminal<CR>", dopts)
+--=====================================
+
+--=====================================
+-- Savefiles
+key("n", "<S-w>", ":w<CR>", dopts)
+key("n", "<S-q>", ":q<CR>", dopts)
+key("n", "<S-s>", ":wq<CR>", dopts)
 --=====================================
 
 --=====================================
