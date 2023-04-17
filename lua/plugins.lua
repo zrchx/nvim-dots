@@ -35,15 +35,18 @@ local plugins = {
       require'config.lspconf'
     end,
   },
+  -- Mason
   { 'williamboman/mason.nvim',
     cmd = {"Mason", "MasonInstall", "MasonUninstall"},
     opts = function ()
-      return require'config.misc'.mason
+      return require'config.various'.mason
     end,
     config = function (_, opts)
       require('mason').setup(opts)
     end
   },
+  -- =======================================
+
   -- =======================================
   -- CMP
   { 'hrsh7th/nvim-cmp',
@@ -53,13 +56,13 @@ local plugins = {
       {'L3MON4D3/LuaSnip',
         dependencies = 'rafamadriz/friendly-snippets',
         config = function ()
-          require'config.misc'.luasnip()
+          require'config.various'.luasnip()
         end
       },
       -- Autopairs
       { 'windwp/nvim-autopairs',
       opts = function ()
-        return require'config.misc'.autopairs
+        return require'config.various'.autopairs
       end,
       config = function (_, opts)
         require('nvim-autopairs').setup(opts)
@@ -79,22 +82,8 @@ local plugins = {
       return require'config.completions'
     end,
     config = function (_, opts)
-        require('cmp').setup(opts)
+      require('cmp').setup(opts)
     end,
-  },
-  -- =======================================
-
-  -- =======================================
-  -- Treesitter
-  { 'nvim-treesitter/nvim-treesitter',
-    init = lazy_load "nvim-treesitter",
-    opts =function ()
-      return require'config.misc'.treesitter
-    end,
-    build = ":TSUpdate",
-    config = function (_, opts)
-      require('nvim-treesitter.configs').setup(opts)
-    end
   },
   -- =======================================
 
@@ -103,17 +92,30 @@ local plugins = {
   -- =======================================
 
   -- =======================================
-  -- Blankline
-  { 'lukas-reineke/indent-blankline.nvim',
-    init = function()
-      lazy_load "indent-blankline.nvim"
+  -- Treesitter
+  { 'nvim-treesitter/nvim-treesitter',
+    init = lazy_load "nvim-treesitter",
+    dependencies = {
+      -- Blankline
+      { 'lukas-reineke/indent-blankline.nvim',
+        init = function()
+          lazy_load "indent-blankline.nvim"
+        end,
+        opts = function()
+          return require'config.various'.blankline
+        end,
+        config = function(_, opts)
+          require('indent_blankline').setup(opts)
+        end,
+      },
+    },
+    opts = function ()
+      return require'config.various'.treesitter
     end,
-    opts = function()
-      return require'config.misc'.blankline
-    end,
-    config = function(_, opts)
-      require('indent_blankline').setup(opts)
-    end,
+    build = ":TSUpdate",
+    config = function (_, opts)
+      require('nvim-treesitter.configs').setup(opts)
+    end
   },
   -- =======================================
 
@@ -166,36 +168,26 @@ local plugins = {
     end
   },
   -- =======================================
-
-  -- =======================================
-  -- Bufferline
-  { 'akinsho/bufferline.nvim',
+  { 'rebelot/heirline.nvim',
     lazy = false,
-    opts = function ()
-      return require'config.visual'.bufferline
-    end,
-    config = function (_, opts)
-      require('bufferline').setup(opts)
+    dependencies = {
+      { 'lewis6991/gitsigns.nvim',
+        opts = function ()
+          return require'config.various'.gitsigns
+        end,
+        config = function (_, opts)
+          require('gitsigns').setup(opts)
+        end
+      },
+    },
+    config = function ()
+      require'config.allines'
     end
   },
-  -- =======================================
-
-  -- =======================================
-  -- Lualine
-  {'nvim-lualine/lualine.nvim',
-    lazy = false,
-    opts = function ()
-      return require'config.tabsline'
-    end,
-    config = function (_, opts)
-      require('lualine').setup(opts)
-    end
-  },
-  -- =======================================
 }
 
 -- =======================================
 -- Init --
-local lazy_config = require'config.misc'.lazy_nvim
+local lazy_config = require'config.various'.lazy_nvim
 require('lazy').setup(plugins, lazy_config)
 -- =======================================

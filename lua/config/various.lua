@@ -1,8 +1,24 @@
 -- ====================================
---          plugins config           --
--- ====================================
-local ms = {}
-ms.lazy_nvim = {
+--          Various Configs          --
+local V = {}
+-- Git Signs
+V.gitsigns = {
+  signs = {
+    add = { text = ' ' },
+    change = { text = ' ' },
+    delete = { text = ' ' },
+    topdelete = { text = ' ' },
+    changedelete = { text = ' ' },
+    untracked = { text = ' ' },
+  },
+  signcolumn = false,
+  numhl = false,
+  linehl = false,
+  word_diff = false,
+}
+
+-- Lazy nvim
+V.lazy_nvim = {
   defaults = { lazy = true },
   ui = {
     icons = {
@@ -47,18 +63,18 @@ ms.lazy_nvim = {
   },
 }
 -- Treesitter
-ms.treesitter = {
-  ensure_installed = { "cpp", "lua", "bash" },
-  highlight = { enable = true, use_languagetree = true },
-  indent = { enable = true, }
+V.treesitter = {
+    ensure_installed = { "cpp", "lua", "bash" },
+    highlight = { enable = true, use_languagetree = true },
+    indent = { enable = true, }
 }
 -- Auto-Pairs
-ms.autopairs = {
-  fast_wrap = {},
-  disable_filetype = { "TelescopePrompt" },
+V.autopairs = {
+    fast_wrap = {},
+    disable_filetype = { "TelescopePrompt" },
 }
 -- Mason
-ms.mason = {
+V.mason = {
   ensure_installed = { "lua-language-server", "clandg" },
   PATH = "skip",
   ui = {
@@ -81,9 +97,11 @@ ms.mason = {
   max_concurrent_installers = 2,
 }
 -- LuaSnip
-ms.luasnip = function ()
-  local options = { history = true, updateevents = "TextChanged,TextChangedI" }
-  require("luasnip").config.set_config(options)
+V.luasnip = function ()
+  require("luasnip").config.set_config({
+    history = true,
+    updateevents = "TextChanged,TextChangedI"
+  })
   -- VS Format
   require("luasnip.loaders.from_vscode").lazy_load { paths = vim.g.luasnippets_path or "" }
   require("luasnip.loaders.from_vscode").lazy_load()
@@ -93,7 +111,7 @@ ms.luasnip = function ()
   -- Lua Format
   require("luasnip.loaders.from_lua").load()
   require("luasnip.loaders.from_lua").lazy_load { paths = vim.g.lua_snippets_path or "" }
-
+  -- Insert mode
   vim.api.nvim_create_autocmd("InsertLeave", {
     callback = function()
       if require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
@@ -105,17 +123,14 @@ ms.luasnip = function ()
   })
 end
 -- Blankline
-ms.blankline = {
+V.blankline = {
   indentLine_enabled = 1,
   filetype_exclude = {
     "help",
     "terminal",
     "lazy",
     "lspinfo",
-    "TelescopePrompt",
-    "TelescopeResults",
     "mason",
-    "",
   },
   buftype_exclude = { "terminal" },
   show_trailing_blankline_indent = false,
@@ -123,4 +138,5 @@ ms.blankline = {
   show_current_context = true,
   show_current_context_start = true,
 }
-return ms
+return V
+-- ====================================

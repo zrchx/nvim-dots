@@ -1,9 +1,9 @@
 -- ====================================
---          plugins config           --
--- ====================================
+--             Lsp Config            --
+
 local function lspSymbol(name, icon)
-  local hl = "DiagnosticSign" .. name
-  vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
+    local hl = "DiagnosticSign" .. name
+    vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
 end
 
 lspSymbol("Error", "")
@@ -12,22 +12,13 @@ lspSymbol("Hint", "")
 lspSymbol("Warn", "")
 
 vim.diagnostic.config {
-  virtual_text = {
-    prefix = "",
-  },
-  signs = true,
-  underline = true,
-  update_in_insert = false,
+    virtual_text = {
+      prefix = "",
+    },
+    signs = true,
+    underline = true,
+    update_in_insert = false,
 }
-
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = "single",
-})
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = "single",
-  focusable = false,
-  relative = "cursor",
-})
 
 vim.notify = function(msg, log_level)
   if msg:match "exit code" then
@@ -40,9 +31,12 @@ vim.notify = function(msg, log_level)
   end
 end
 require('lspconfig.ui.windows').default_options.border = 'single'
--- LSP
-local v = {}
-v.cap_lsp ={
+
+-- LSP settings --
+local L = {}
+
+-- Capabilities
+L.cap_lsp ={
   documentationFormat = { "markdown", "plaintext" },
   snippetSupport = true,
   preselectSupport = true,
@@ -59,19 +53,31 @@ v.cap_lsp ={
     },
   },
 }
-v.attach_lsp = function(client, bufnr)
-  client.server_capabilities.documentFormattingProvider = false
-  client.server_capabilities.documentRangeFormattingProvider = false
+
+-- Attach
+L.attach_lsp = function(client)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
 end
 
-require('lspconfig').lua_ls.setup {
-  on_attach = v.attach_lsp,
-  capabilities = v.cap_lsp,
+-- Borders
+L.handler = {
+  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" }),
+  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+    border = "single",
+    relative = "cursor",
+    focusable = false
+  })
+}
+
+-- Settings handler
+local lsp_opts = {
+  on_attach = L.attach_lsp,
+  capabilities = L.cap_lsp,
+  handlers = L.handler,
   settings = {
     Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
+      diagnostics = { globals = { "vim" } },
 	    workspace = {
         library = {
           [vim.fn.expand "$VIMRUNTIME/lua"] = true,
@@ -84,43 +90,14 @@ require('lspconfig').lua_ls.setup {
   },
 }
 
-require('lspconfig').clangd.setup {
-  on_attach = v.attach_lsp,
-  capabilities = v.cap_lsp,
-  settings ={
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-        },
-      maxPreload = 100000,
-      preloadFileSize = 10000,
-      },
-    },
-  },
-}
+-- Server function --
+local function server_init (server_name)
+    return require('lspconfig')[server_name]
+end
 
-require('lspconfig').bashls.setup {
-  on_attach = v.attach_lsp,
-  capabilities = v.cap_lsp,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-        },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
-      },
-    },
-  },
-}
-return v
+server_init("clangd").setup (lsp_opts)
+server_init("lua_ls").setup (lsp_opts)
+server_init("bashls").setup (lsp_opts)
+
+return L
+-- ====================================

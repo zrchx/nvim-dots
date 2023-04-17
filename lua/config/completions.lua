@@ -1,9 +1,13 @@
 -- ====================================
---          plugins config           --
--- ====================================
--- CMP --
-local cmp = require'cmp'
+--            Completions            --
 
+-- ====================================
+-- Aliases
+local cmp = require'cmp'
+-- ====================================
+
+-- ====================================
+-- Icons
 local icons = {
   Text = ' ',
   Method = '柳',
@@ -31,28 +35,17 @@ local icons = {
   Operator = ' ',
   TypeParameter = ' ',
 }
+-- ====================================
 
-local function border(hl_name)
-  return {
-    { "╭", hl_name },
-    { "─", hl_name },
-    { "╮", hl_name },
-    { "│", hl_name },
-    { "╯", hl_name },
-    { "─", hl_name },
-    { "╰", hl_name },
-    { "│", hl_name },
-  }
-end
-
+-- ====================================
 local options = {
   window = {
     completion = {
-      border = border "CmpBorder",
+      border = "single",
       winhighlight = "Normal:CmpPmenu,CursorLine:PmenuSel,Search:None",
       scrollbar = false,
     },
-    documentation = { border = border "CmpDocBorder", winhighlight = "Normal:CmpDoc" },
+    documentation = { border = "single", winhighlight = "Normal:CmpDoc" },
   },
   formatting = {
     format = function(_, vim_item)
@@ -61,9 +54,7 @@ local options = {
     end,
   },
   snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
+    expand = function(args) require('luasnip').lsp_expand(args.body) end,
   },
   mapping = {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
@@ -72,10 +63,7 @@ local options = {
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.close(),
-    ["<CR>"] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false,
-    },
+    ["<CR>"] = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -84,10 +72,7 @@ local options = {
       else
         fallback()
       end
-    end, {
-      "i",
-      "s",
-    }),
+    end, { "i", "s" }),
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -96,17 +81,15 @@ local options = {
       else
         fallback()
       end
-    end, {
-      "i",
-      "s",
-    }),
+    end, { "i", "s" }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'buffer' },
-    { name = "nvim_lua" },
-    { name = "path" },
+    { name = 'nvim_lsp', priority = 1000 },
+    { name = 'luasnip', priority = 750 },
+    { name = 'nvim_lua', priority = 650},
+    { name = 'buffer', priority = 500 },
+    { name = 'path', priority = 250 },
   }
 }
 return options
+-- ====================================
