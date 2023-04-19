@@ -39,7 +39,7 @@ local plugins = {
   { 'williamboman/mason.nvim',
     cmd = {"Mason", "MasonInstall", "MasonUninstall"},
     opts = function ()
-      return require'config.various'.mason
+      return require'config.varconf'.mason
     end,
     config = function (_, opts)
       require('mason').setup(opts)
@@ -56,13 +56,13 @@ local plugins = {
       {'L3MON4D3/LuaSnip',
         dependencies = 'rafamadriz/friendly-snippets',
         config = function ()
-          require'config.various'.luasnip()
+          require'config.varconf'.luasnip()
         end
       },
       -- Autopairs
       { 'windwp/nvim-autopairs',
       opts = function ()
-        return require'config.various'.autopairs
+        return require'config.varconf'.autopairs
       end,
       config = function (_, opts)
         require('nvim-autopairs').setup(opts)
@@ -79,7 +79,7 @@ local plugins = {
       },
     },
     opts = function ()
-      return require'config.completions'
+      return require'config.cmpconf'
     end,
     config = function (_, opts)
       require('cmp').setup(opts)
@@ -102,7 +102,7 @@ local plugins = {
           lazy_load "indent-blankline.nvim"
         end,
         opts = function()
-          return require'config.various'.blankline
+          return require'config.varconf'.blankline
         end,
         config = function(_, opts)
           require('indent_blankline').setup(opts)
@@ -110,7 +110,7 @@ local plugins = {
       },
     },
     opts = function ()
-      return require'config.various'.treesitter
+      return require'config.varconf'.treesitter
     end,
     build = ":TSUpdate",
     config = function (_, opts)
@@ -133,7 +133,7 @@ local plugins = {
   { 'nvim-tree/nvim-tree.lua',
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     opts = function()
-      return require 'config.nvimtree'
+      return require 'config.ntreeconf'
     end,
     config = function(_, opts)
       require('nvim-tree').setup(opts)
@@ -145,7 +145,7 @@ local plugins = {
   -- Theme
   { 'folke/tokyonight.nvim',
     opts = function ()
-      return require'config.visual'.tokyonight
+      return require'config.msconf'.tokyonight
     end,
     config = function (_, opts)
       require('tokyonight').setup(opts)
@@ -158,7 +158,7 @@ local plugins = {
   { 'NvChad/nvim-colorizer.lua',
     init = lazy_load "nvim-colorizer.lua",
     opts = function ()
-      return require'config.visual'.colorizer
+      return require'config.msconf'.colorizer
     end,
     config = function (_, opts)
       require('colorizer').setup(opts)
@@ -168,12 +168,15 @@ local plugins = {
     end
   },
   -- =======================================
+
+  -- =======================================
+  -- NeoVim Lines and tabs
   { 'rebelot/heirline.nvim',
     lazy = false,
     dependencies = {
       { 'lewis6991/gitsigns.nvim',
         opts = function ()
-          return require'config.various'.gitsigns
+          return require'config.varconf'.gitsigns
         end,
         config = function (_, opts)
           require('gitsigns').setup(opts)
@@ -181,13 +184,14 @@ local plugins = {
       },
     },
     config = function ()
-      require'config.allines'
+      require'config.heirconf'
     end
-  },
+  }
+  -- =======================================
 }
 
 -- =======================================
 -- Init --
-local lazy_config = require'config.various'.lazy_nvim
+local lazy_config = require'config.varconf'.lazy_nvim
 require('lazy').setup(plugins, lazy_config)
 -- =======================================

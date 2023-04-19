@@ -3,9 +3,9 @@
 
 -- ====================================
 -- Aliases --
-local colors = require('tokyonight.colors').setup()
+local theme = require('tokyonight.colors').setup()
 local cond = require('heirline.conditions')
-local uts = require('heirline.utils')
+--local uts = require('heirline.utils')
 -- ====================================
 
 -- ====================================
@@ -14,21 +14,18 @@ local uts = require('heirline.utils')
 
 -- ====================================
 -- Separator Module
-local stheme = function (bgcolor, fgcolor)
-    return { bg = bgcolor, fg = bgcolor }
-end
-local separator = function (direction, thick)
+local separator = function (direction, thick, bgcolor, fgcolor)
     -- Left
     if direction == "left" and thick == "light" then
-      return { provider = '', }
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
     elseif direction == "left" and thick == "heavy" then
-      return { provider = '', }
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
     end
     -- Right
     if direction == "right" and thick == "light"then
-      return { provider = '', }
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
     elseif direction == "right" and thick == "heavy" then
-      return { provider = '', }
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
     end
 end
 -- ====================================
@@ -102,33 +99,26 @@ local vimodes = {
   },
   -- Icon and text
   {
-    provider = ' ',
-    hl = function (self)
-      local mode = self.mode:sub(1, 1)
-      return { bg = "bg_dark", fg = self.mode_colors[mode], bold = true, }
-    end
-  },
-  {
     provider = function (self)
-      return "%4("..self.mode_names[self.mode].."%) "
+      return " %4("..self.mode_names[self.mode].."%) "
     end,
     hl = function (self)
-    local mode = self.mode:sub(1, 1)
-    return { bg = "bg_dark", fg = self.mode_colors[mode], bold = true, }
+      local mode = self.mode:sub(1, 1)
+      return { bg = "bg_dark", fg = self.mode_colors[mode], bold = true }
     end
   },
   {
     provider = ' 󰘧 ',
     hl = function (self)
       local mode = self.mode:sub(1, 1)
-      return { bg = self.mode_colors[mode], fg = "bg", bold = true, }
+      return { bg = self.mode_colors[mode], fg = "bg_dark", bold = true }
     end
   },
   {
-    provider = ' ',
+    provider = '',
     hl = function (self)
       local mode = self.mode:sub(1, 1)
-      return { fg = self.mode_colors[mode], bold = true, }
+      return { bg = "bg_dark", fg = self.mode_colors[mode], bold = true }
     end
   },
   update = { "ModeChanged", pattern = "*:*" },
@@ -160,7 +150,7 @@ local files = {
   {
     provider = function (self)
       local filename = vim.fn.fnamemodify(self.filename, ":.")
-      if filename == "" then return "[Empty]" end
+      if filename == "" then return " [Empty] " end
       if not cond.width_percent_below(#filename, 0.25) then
         filename = vim.fn.pathshorten(filename)
       end
@@ -168,9 +158,9 @@ local files = {
     end,
     hl = function ()
       if vim.bo.modified then
-        return { fg = "cyan", bold = true, force = true}
+        return { bg = "bg_dark", fg = "cyan", bold = true }
       else
-        return { fg = "white"}
+        return { bg = "bg_dark", fg = "white"}
       end
     end
   },
@@ -180,76 +170,65 @@ local files = {
       condition = function ()
         return vim.bo.modified
       end,
-      provider = "",
-      hl = { fg = "green" }
+      provider = " ",
+      hl = { bg = "bg_dark", fg = "green" }
     },
     {
       condition = function ()
         return not vim.bo.modifiable or vim.bo.readonly
       end,
-      provider = "",
-      hl = { fg = "orange" }
+      provider = " ",
+      hl = { bg = "bg_dark", fg = "orange" }
     },
   },
   -- Separator
   {
-    separator('right', 'light'),
-    stheme('#121', '#fff')
+    separator('right', 'light', 'bg_dark', 'cyan'),
   },
 }
 -- ====================================
 
 
 -- ====================================
--- Ruler
+-- Ruler & Scrollbar
+-- This dont work
 local ruler = {
-  -- Separator
-  {
-    provider = ' ',
-    hl = { fg = "cyan" }
+  { -- Separator
+    separator('left', 'heavy', 'bg_dark', 'cyan')
   },
-  -- Lines
-  {
-    provider = "  %L",
-    hl = { fg = "green" }
+  { -- Lines
+    --provider = "  %L",
+    --hl = {'bg_dark', 'green'}
   },
-  -- Mini Separator
-  {
-    provider = "  ",
-    hl = { fg = "cyan" }
+  { -- Separator
+    separator('left', 'light', 'bg_dark', 'cyan')
   },
-  -- Current Line
-  {
-    provider = " %l",
-    hl = { fg = "yellow" }
+  { -- Current Line
+    --provider = " %l :  %2c",
+    --hl = {'bg_dark', 'yellow'}
   },
-  -- Separator
-  {
-    provider = " | ",
-    hl = { fg = "cyan" }
+  { -- Separator
+    separator('right', 'light', 'bg_dark', 'cyan'),
   },
-  -- Current Colunm
-  {
-    provider = " %c",
-    hl = { fg = "red" }
+  { -- Percentaje
+    --provider = "󰠞 %P ",
+    --hl = {'bg_dark', 'green'}
   },
-  -- Mini Separator
-  {
-    provider = "  ",
-    hl = { fg = "cyan" }
-  },
-  -- Percentaje
-  {
-    provider = " %p ",
-    hl = { fg = "green" }
-  },
-  -- Separator
-  {
-    provider = ' ',
-    hl = { fg = "cyan" }
+  { -- Separator
+    separator('right', 'heavy', 'bg_dark', 'cyan')
   },
 }
 
+local scrollbar ={
+  static = { sbar = { '🭶', '🭷', '🭸', '🭹', '🭺', '🭻' } },
+  provider = function(self)
+    local curr_line = vim.api.nvim_win_get_cursor(0)[1]
+    local lines = vim.api.nvim_buf_line_count(0)
+    local i = math.floor((curr_line - 1) / lines * #self.sbar) + 1
+    return string.rep(self.sbar[i], 2)
+  end,
+  hl = { fg = "blue", bg = "bg_dark" },
+}
 -- ====================================
 
 
@@ -364,19 +343,26 @@ local git = {
 
 -- ====================================
 -- Groups
-
-
 local a_component = {
   vimodes,
   files
 }
 
+local b_component = {
+  lsp_active,
+  diagnostic
+}
+
+local x_component = {
+  ruler,
+  scrollbar
+}
+
 local sline = {
     a_component,
     git,
-    diagnostic,
-    lsp_active,
-    ruler,
+    b_component,
+    x_component
 }
 -- ====================================
 
@@ -386,130 +372,6 @@ local sline = {
 
 -- ====================================
 -- Tabline
-local TablineBufnr = {
-    provider = function(self)
-        return tostring(self.bufnr) .. ". "
-    end,
-    hl = "Comment",
-}
-
--- we redefine the filename component, as we probably only want the tail and not the relative path
-local TablineFileName = {
-    provider = function(self)
-        -- self.filename will be defined later, just keep looking at the example!
-        local filename = self.filename
-        filename = filename == "" and "[No Name]" or vim.fn.fnamemodify(filename, ":t")
-        return filename
-    end,
-    hl = function(self)
-        return { bold = self.is_active or self.is_visible, italic = true }
-    end,
-}
-
--- this looks exactly like the FileFlags component that we saw in
--- #crash-course-part-ii-filename-and-friends, but we are indexing the bufnr explicitly
--- also, we are adding a nice icon for terminal buffers.
-local TablineFileFlags = {
-    {
-        condition = function(self)
-            return vim.api.nvim_buf_get_option(self.bufnr, "modified")
-        end,
-        provider = "[+]",
-        hl = { fg = "green" },
-    },
-    {
-        condition = function(self)
-            return not vim.api.nvim_buf_get_option(self.bufnr, "modifiable")
-                or vim.api.nvim_buf_get_option(self.bufnr, "readonly")
-        end,
-        provider = function(self)
-            if vim.api.nvim_buf_get_option(self.bufnr, "buftype") == "terminal" then
-                return "  "
-            else
-                return ""
-            end
-        end,
-        hl = { fg = "orange" },
-    },
-}
-
--- Here the filename block finally comes together
-local TablineFileNameBlock = {
-    init = function(self)
-        self.filename = vim.api.nvim_buf_get_name(self.bufnr)
-    end,
-    hl = function(self)
-        if self.is_active then
-            return "TabLineSel"
-        -- why not?
-        -- elseif not vim.api.nvim_buf_is_loaded(self.bufnr) then
-        --     return { fg = "gray" }
-        else
-            return "TabLine"
-        end
-    end,
-    on_click = {
-        callback = function(_, minwid, _, button)
-            if (button == "m") then -- close on mouse middle click
-                vim.schedule(function()
-                    vim.api.nvim_buf_delete(minwid, { force = false })
-                end)
-            else
-                vim.api.nvim_win_set_buf(0, minwid)
-            end
-        end,
-        minwid = function(self)
-            return self.bufnr
-        end,
-        name = "heirline_tabline_buffer_callback",
-    },
-    TablineBufnr,
-    fi, -- turns out the version defined in #crash-course-part-ii-filename-and-friends can be reutilized as is here!
-    TablineFileName,
-    TablineFileFlags,
-}
-
--- a nice "x" button to close the buffer
-local TablineCloseButton = {
-    condition = function(self)
-        return not vim.api.nvim_buf_get_option(self.bufnr, "modified")
-    end,
-    { provider = " " },
-    {
-        provider = "",
-        hl = { fg = "gray" },
-        on_click = {
-            callback = function(_, minwid)
-                vim.schedule(function()
-                    vim.api.nvim_buf_delete(minwid, { force = false })
-                end)
-                vim.cmd.redrawtabline()
-            end,
-            minwid = function(self)
-                return self.bufnr
-            end,
-            name = "heirline_tabline_close_buffer_callback",
-        },
-    },
-}
-
--- The final touch!
-local TablineBufferBlock = uts.surround({ "", "" }, function(self)
-    if self.is_active then
-        return uts.get_highlight("TabLineSel").bg
-    else
-        return uts.get_highlight("TabLine").bg
-    end
-end, { TablineFileNameBlock, TablineCloseButton })
-
--- and here we go
-local BufferLine = uts.make_buflist(
-    TablineBufferBlock,
-    { provider = "", hl = { fg = "gray" } }, -- left truncation, optional (defaults to "<")
-    { provider = "", hl = { fg = "gray" } } -- right trunctation, also optional (defaults to ...... yep, ">")
-    -- by the way, open a lot of buffers and try clicking them ;)
-)
-local TabLine = { BufferLine, }
 -- ====================================
 
 
@@ -522,13 +384,8 @@ local TabLine = { BufferLine, }
 -- Setup
 require('heirline').setup({
     statusline = sline,
-    tabLine = TabLine,
     opts = {
-      colors = colors,
-      buftype = { "terminal", "prompt", "nofile", "help", "quickfix" },
-      filetype = { "NvimTree", "dashboard" }
+      colors = theme,
     }
 })
-vim.o.showtabline = 2
-vim.cmd([[au FileType * if index(['wipe', 'delete'], &bufhidden) >= 0 | set nobuflisted | endif]])
 -- ====================================

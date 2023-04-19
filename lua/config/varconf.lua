@@ -64,7 +64,7 @@ V.lazy_nvim = {
 }
 -- Treesitter
 V.treesitter = {
-    ensure_installed = { "cpp", "lua", "bash" },
+    ensure_installed = { "c", "cpp", "lua", "bash" },
     highlight = { enable = true, use_languagetree = true },
     indent = { enable = true, }
 }
