@@ -14,26 +14,18 @@ local cond = require('heirline.conditions')
 
 -- ====================================
 -- Separator Module
-local separator = function (direction, thick, sharp, bgcolor, fgcolor)
-    -- Left rounded
-    if direction == 'left' and thick == 'light' and sharp == nil then
-      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
-    elseif direction == 'left' and thick == 'heavy' and sharp == nil then
-      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
-    end
-    -- Right rounded
-    if direction == 'right' and thick == 'light' and sharp == nil then
-      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
-    elseif direction == 'right' and thick == 'heavy' and sharp == nil then
-      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor }}
-    end
+local separator = function (direction, pos, bgcolor, fgcolor)
     -- Left sharp
-    if direction == 'left' and thick == nil and sharp == 'true' then
-      return { provider = '', hl = {bg = bgcolor, fg = fgcolor}}
+    if direction == 'left' and pos == 'x' then
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor}}
+    elseif direction == 'left' and pos == 'y' then
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor}}
     end
     -- Right sharp
-    if direction == 'right' and thick == nil and sharp == 'true' then
-      return { provider = '', hl = {bg = bgcolor, fg = fgcolor}}
+    if direction == 'right' and pos == 'x' then
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor}}
+    elseif direction == 'right' and pos == 'y' then
+      return { provider = ' ', hl = {bg = bgcolor, fg = fgcolor}}
     end
 end
 -- ====================================
@@ -105,8 +97,14 @@ local vimodes = {
       t =  'red',
     }
   },
-  -- Icon and text
-  {
+  { -- Icon
+    provider = ' 󰘧',
+    hl = function (self)
+      local mode = self.mode:sub(1, 1)
+      return { bg = self.mode_colors[mode], fg = 'bg_dark', bold = true }
+    end
+  },
+  { -- Text mode
     provider = function (self)
       return ' %4('..self.mode_names[self.mode]..'%) '
     end,
@@ -115,11 +113,11 @@ local vimodes = {
       return { bg = self.mode_colors[mode], fg = 'bg_dark', bold = true }
     end
   },
-  {
-    provider = '',
+  { -- Separator
+    provider = ' ',
     hl = function (self)
       local mode = self.mode:sub(1, 1)
-      return { bg = 'bg_dark', fg = self.mode_colors[mode], bold = true }
+      return { bg = 'bg', fg = self.mode_colors[mode], bold = true }
     end
   },
   update = { 'ModeChanged', pattern = '*:*' },
@@ -133,25 +131,26 @@ local files = {
   init = function (self)
     self.filename = vim.api.nvim_buf_get_name(0)
   end,
-  -- File Icon
-  {
+  { -- Separator
+    separator('right', 'x', 'bg', 'bg_dark')
+  },
+  { -- Files icons
     init = function (self)
       local filename = self.filename
       local extension = vim.fn.fnamemodify(filename, ':e')
       self.icon, self.icon_color = require('nvim-web-devicons').get_icon_color(filename, extension, { default = true })
     end,
     provider = function (self)
-      return self.icon and (self.icon .. ' ')
+      return self.icon and (' ' .. self.icon .. ' ')
     end,
     hl = function (self)
       return { bg = 'bg_dark', fg = self.icon_color }
     end
   },
-  -- File Name
-  {
+  { -- Files names
     provider = function (self)
-      local filename = vim.fn.fnamemodify(self.filename, ':.')
-      if filename == '' then return ' [Empty] ' end
+      local filename = ' ' .. vim.fn.fnamemodify(self.filename, ':.') .. ' '
+      if filename == '  ' then return ' [New] ' end
       if not cond.width_percent_below(#filename, 0.25) then
         filename = vim.fn.pathshorten(filename)
       end
@@ -159,32 +158,14 @@ local files = {
     end,
     hl = function ()
       if vim.bo.modified then
-        return { bg = 'bg_dark', fg = 'cyan', bold = true }
+        return { bg = 'bg_dark', fg = 'blue', bold = true }
       else
-        return { bg = 'bg_dark', fg = 'white' }
+        return { bg = 'bg_dark', fg = 'gray' }
       end
     end
   },
-  -- File Flags
-  {
-    {
-      condition = function ()
-        return vim.bo.modified
-      end,
-      provider = ' ',
-      hl = { bg = 'bg_dark', fg = 'green' }
-    },
-    {
-      condition = function ()
-        return not vim.bo.modifiable or vim.bo.readonly
-      end,
-      provider = ' ',
-      hl = { bg = 'bg_dark', fg = 'orange' }
-    },
-  },
-  -- Separator
-  {
-    separator('right', 'light', 'bg_dark', 'cyan'),
+  { -- Separator
+    separator('left', 'x', 'bg', 'bg_dark'),
   },
 }
 -- ====================================
@@ -195,28 +176,14 @@ local files = {
 -- This dont work
 local ruler = {
   { -- Separator
-    separator('left', 'heavy', 'bg_dark', 'cyan')
-  },
-  { -- Lines
-    provider = '  %L',
-    hl = { bg = 'bg_dark', fg = 'green'}
-  },
-  { -- Separator
-    separator('left', 'light', 'bg_dark', 'cyan')
+    separator('right', 'y', 'bg', 'bg_dark')
   },
   { -- Current Line
     provider = '  %l :  %c ',
     hl = { bg = 'bg_dark', fg = 'yellow'}
   },
   { -- Separator
-    separator('right', 'light', 'bg_dark', 'cyan'),
-  },
-  { -- Percentaje
-    provider = '󰠞 %P ',
-    hl = { bg = 'bg_dark', fg = 'green'}
-  },
-  { -- Separator
-    separator('right', 'heavy', 'bg_dark', 'cyan')
+    separator('left', 'y', 'bg', 'bg_dark')
   },
 }
 
