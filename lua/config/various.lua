@@ -1,6 +1,33 @@
 -- ====================================
 --          Various Configs          --
 local V = {}
+-- Color theme
+V.tokyonight = {
+  style = "night",
+  light_style = "moon",
+  terminal_colors = true,
+  styles = {
+    sidebars = "dark",
+    floats = "dark",
+  },
+  hide_inactive_statusline = true,
+  lualine_bold = true,
+}
+-- Colorizer
+V.colorizer = {
+  filetypes = { "*" },
+  buftypes = {},
+  user_default_options = {
+    RGB = true,
+    RRGGBB = true,
+    names = false,
+    RRGGBBAA = true,
+    AARRGGBB = false,
+    mode = "background",
+    virtualtext = "■",
+    always_update = false
+  },
+}
 -- Git Signs
 V.gitsigns = {
   signs = {
@@ -16,7 +43,6 @@ V.gitsigns = {
   linehl = false,
   word_diff = false,
 }
-
 -- Lazy nvim
 V.lazy_nvim = {
   defaults = { lazy = true },
@@ -123,20 +149,26 @@ V.luasnip = function ()
   })
 end
 -- Blankline
-V.blankline = {
-  indentLine_enabled = 1,
-  filetype_exclude = {
-    "help",
-    "terminal",
-    "lazy",
-    "lspinfo",
-    "mason",
-  },
-  buftype_exclude = { "terminal" },
-  show_trailing_blankline_indent = false,
-  show_first_indent_level = false,
-  show_current_context = true,
-  show_current_context_start = true,
-}
+V.blankline = function ()
+  vim.opt.list = true
+  vim.opt.listchars:append "space:⋅"
+  require("indent_blankline").setup{
+    filetype_exclude = {
+      "help",
+      "terminal",
+      "lazy",
+      "lspinfo",
+      "mason",
+      "NvimTree"
+    },
+    buftype_exclude = {
+      "terminal"
+    },
+    IndentLine = 1,
+    space_char_blankline = " ",
+    show_current_context = true,
+    show_current_context_start = true,
+  }
+end
 return V
 -- ====================================
