@@ -31,12 +31,12 @@ V.colorizer = {
 -- Git Signs
 V.gitsigns = {
   signs = {
-    add = { text = ' ' },
-    change = { text = ' ' },
-    delete = { text = ' ' },
-    topdelete = { text = ' ' },
-    changedelete = { text = ' ' },
-    untracked = { text = ' ' },
+    add = { text = " " },
+    change = { text = " " },
+    delete = { text = " " },
+    topdelete = { text = " " },
+    changedelete = { text = " " },
+    untracked = { text = " " },
   },
   signcolumn = false,
   numhl = false,

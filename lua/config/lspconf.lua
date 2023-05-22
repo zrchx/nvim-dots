@@ -6,10 +6,10 @@ local function lspSymbol(name, icon)
     vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
 end
 
-lspSymbol("Error", "")
-lspSymbol("Info", "")
-lspSymbol("Hint", "")
-lspSymbol("Warn", "")
+lspSymbol("Error", "")
+lspSymbol("Info", "")
+lspSymbol("Hint", "")
+lspSymbol("Warn", "")
 
 vim.diagnostic.config {
     virtual_text = {
@@ -30,7 +30,7 @@ vim.notify = function(msg, log_level)
     vim.api.nvim_echo({ { msg } }, true, {})
   end
 end
-require('lspconfig.ui.windows').default_options.border = 'single'
+require("lspconfig.ui.windows").default_options.border = "single"
 
 -- LSP settings --
 local L = {}
@@ -92,7 +92,7 @@ local lsp_opts = {
 
 -- Server function --
 local function server_init (server_name)
-    return require('lspconfig')[server_name]
+  return require("lspconfig")[server_name]
 end
 
 server_init("clangd").setup (lsp_opts)

@@ -11,8 +11,6 @@ local dopts = { noremap = true, silent = true }
 
 --=====================================
 -- Switch bufferline
-key("n", "<S-h>", ":BufferLineCycleNext<CR>", dopts)
-key("n", "<S-l>", ":BufferLineCyclePrev<CR>", dopts)
 --=====================================
 
 --=====================================
@@ -24,7 +22,6 @@ key("n", "<S-t>", ":terminal<CR>", dopts)
 -- Savefiles
 key("n", "<S-w>", ":w<CR>", dopts)
 key("n", "<S-q>", ":q<CR>", dopts)
-key("n", "<S-s>", ":wq<CR>", dopts)
 --=====================================
 
 --=====================================

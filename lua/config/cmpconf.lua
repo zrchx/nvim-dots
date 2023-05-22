@@ -3,37 +3,37 @@
 
 -- ====================================
 -- Aliases
-local cmp = require'cmp'
+local cmp = require"cmp"
 -- ====================================
 
 -- ====================================
 -- Icons
 local icons = {
-  Text = ' ',
-  Method = '柳',
-  Function = '柳',
-  Constructor = '柳',
-  Field = ' ',
-  Variable = ' ',
-  Class = ' ',
-  Interface = ' ',
-  Module = ' ',
-  Property = ' ',
-  Unit = ' ',
-  Value = ' ',
-  Enum = ' ',
-  Keyword = ' ',
-  Snippet = ' ',
-  Color = ' ',
-  File = '',
-  Reference = '',
-  Folder = ' ',
-  EnumMember = ' ',
-  Constant = ' ',
-  Struct = ' ',
-  Event = '',
-  Operator = ' ',
-  TypeParameter = ' ',
+  Text = " ",
+  Method = "柳",
+  Function = "柳",
+  Constructor = "柳",
+  Field = " ",
+  Variable = " ",
+  Class = " ",
+  Interface = " ",
+  Module = " ",
+  Property = " ",
+  Unit = " ",
+  Value = " ",
+  Enum = " ",
+  Keyword = " ",
+  Snippet = " ",
+  Color = " ",
+  File = " ",
+  Reference = " ",
+  Folder = " ",
+  EnumMember = " ",
+  Constant = " ",
+  Struct = " ",
+  Event = "",
+  Operator = " ",
+  TypeParameter = " ",
 }
 -- ====================================
 
@@ -49,12 +49,12 @@ local options = {
   },
   formatting = {
     format = function(_, vim_item)
-      vim_item.kind = (icons[vim_item.kind] or '') .. vim_item.kind
+      vim_item.kind = (icons[vim_item.kind] or "") .. vim_item.kind
       return vim_item
     end,
   },
   snippet = {
-    expand = function(args) require('luasnip').lsp_expand(args.body) end,
+    expand = function(args) require("luasnip").lsp_expand(args.body) end,
   },
   mapping = {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
@@ -84,11 +84,11 @@ local options = {
     end, { "i", "s" }),
   },
   sources = {
-    { name = 'nvim_lsp', priority = 1000 },
-    { name = 'luasnip', priority = 750 },
-    { name = 'nvim_lua', priority = 650},
-    { name = 'buffer', priority = 500 },
-    { name = 'path', priority = 250 },
+    { name = "nvim_lsp", priority = 1000 },
+    { name = "luasnip", priority = 750 },
+    { name = "nvim_lua", priority = 650},
+    { name = "buffer", priority = 500 },
+    { name = "path", priority = 250 },
   }
 }
 return options

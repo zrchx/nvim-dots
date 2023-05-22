@@ -20,8 +20,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 o.rtp:prepend(lazypath)
 -- Configs --
-require'plugins'
-require'keymaps'
+require"plugins"
+require"keymaps"
 -- ====================================
 
 -- ====================================
@@ -64,6 +64,7 @@ vim.cmd[[colorscheme tokyonight]]
 o.clipboard = "unnamedplus"
 o.timeoutlen = 400
 o.updatetime = 250
+vim.o.showmode = false
 -- ====================================
 
 -- ====================================
@@ -72,6 +73,5 @@ for _, provider in ipairs { "node", "perl", "python3", "ruby" } do
     g["loaded_" .. provider .. "_provider"] = 0
 end
 -- LSP path to binaries
-local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-vim.env.PATH = vim.env.PATH .. (is_windows and ";" or ":") .. fn.stdpath "data" .. "/mason/bin"
+vim.env.PATH = vim.env.PATH .. ":" .. fn.stdpath "data" .. "/mason/bin"
 -- ====================================

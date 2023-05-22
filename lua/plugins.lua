@@ -29,55 +29,50 @@ local plugins = {
 
   -- =======================================
   -- Formater
-  { 'mcauley-penney/tidy.nvim',
-    lazy = false,
-    config = function ()
-      require("tidy").setup()
-    end
-  },
+
   -- =======================================
 
   -- =======================================
   -- LSP
-  { 'neovim/nvim-lspconfig',
+  { "neovim/nvim-lspconfig",
     init = lazy_load "nvim-lspconfig",
     config = function ()
-      require'config.lspconf'
+      require"config.lspconf"
     end,
   },
   -- Mason
-  { 'williamboman/mason.nvim',
+  { "williamboman/mason.nvim",
     cmd = {"Mason", "MasonInstall", "MasonUninstall"},
     opts = function ()
-      return require'config.various'.mason
+      return require"config.various".mason
     end,
     config = function (_, opts)
-      require('mason').setup(opts)
+      require("mason").setup(opts)
     end
   },
   -- =======================================
 
   -- =======================================
   -- CMP
-  { 'hrsh7th/nvim-cmp',
+  { "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
       -- Snippets
-      {'L3MON4D3/LuaSnip',
-        dependencies = 'rafamadriz/friendly-snippets',
+      {"L3MON4D3/LuaSnip",
+        dependencies = "rafamadriz/friendly-snippets",
         config = function ()
-          require'config.various'.luasnip()
+          require"config.various".luasnip()
         end
       },
       -- Autopairs
-      { 'windwp/nvim-autopairs',
+      { "windwp/nvim-autopairs",
       opts = function ()
-        return require'config.various'.autopairs
+        return require"config.various".autopairs
       end,
       config = function (_, opts)
-        require('nvim-autopairs').setup(opts)
+        require("nvim-autopairs").setup(opts)
         local cmp_autopairs = require "nvim-autopairs.completion.cmp"
-        require('cmp').event:on("confirm_done", cmp_autopairs.on_confirm_done())
+        require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
       end
       },
       {
@@ -89,10 +84,10 @@ local plugins = {
       },
     },
     opts = function ()
-      return require'config.cmpconf'
+      return require"config.cmpconf"
     end,
     config = function (_, opts)
-      require('cmp').setup(opts)
+      require("cmp").setup(opts)
     end,
   },
   -- =======================================
@@ -103,25 +98,25 @@ local plugins = {
 
   -- =======================================
   -- Treesitter
-  { 'nvim-treesitter/nvim-treesitter',
+  { "nvim-treesitter/nvim-treesitter",
     init = lazy_load "nvim-treesitter",
     dependencies = {
       -- Blankline
-      { 'lukas-reineke/indent-blankline.nvim',
+      { "lukas-reineke/indent-blankline.nvim",
         init = function()
           lazy_load "indent-blankline.nvim"
         end,
         config = function()
-          return require'config.various'.blankline()
+          return require"config.various".blankline()
         end,
       },
     },
     opts = function ()
-      return require'config.various'.treesitter
+      return require"config.various".treesitter
     end,
     build = ":TSUpdate",
     config = function (_, opts)
-      require('nvim-treesitter.configs').setup(opts)
+      require("nvim-treesitter.configs").setup(opts)
     end
   },
   -- =======================================
@@ -130,47 +125,47 @@ local plugins = {
   -- Icons
   { "nvim-tree/nvim-web-devicons",
     config = function(_, opts)
-      require('nvim-web-devicons').setup(opts)
+      require("nvim-web-devicons").setup(opts)
     end,
   },
   -- =======================================
 
   -- =======================================
   -- File explorer
-  { 'nvim-tree/nvim-tree.lua',
+  { "nvim-tree/nvim-tree.lua",
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     opts = function()
-      return require 'config.ntreeconf'
+      return require "config.ntreeconf"
     end,
     config = function(_, opts)
-      require('nvim-tree').setup(opts)
+      require("nvim-tree").setup(opts)
     end,
   },
   -- =======================================
 
   -- =======================================
   -- Theme
-  { 'folke/tokyonight.nvim',
+  { "folke/tokyonight.nvim",
     opts = function ()
-      return require'config.various'.tokyonight
+      return require"config.various".tokyonight
     end,
     config = function (_, opts)
-      require('tokyonight').setup(opts)
+      require("tokyonight").setup(opts)
     end
   },
   -- =======================================
 
   -- =======================================
   -- Colorizer
-  { 'NvChad/nvim-colorizer.lua',
+  { "NvChad/nvim-colorizer.lua",
     init = lazy_load "nvim-colorizer.lua",
     opts = function ()
-      return require'config.various'.colorizer
+      return require"config.various".colorizer
     end,
     config = function (_, opts)
-      require('colorizer').setup(opts)
+      require("colorizer").setup(opts)
       vim.defer_fn(function()
-        require('colorizer').attach_to_buffer(0)
+        require("colorizer").attach_to_buffer(0)
       end, 0)
     end
   },
@@ -178,20 +173,20 @@ local plugins = {
 
   -- =======================================
   -- NeoVim Lines and tabs
-  { 'rebelot/heirline.nvim',
+  { "rebelot/heirline.nvim",
     lazy = false,
     dependencies = {
-      { 'lewis6991/gitsigns.nvim',
+      { "lewis6991/gitsigns.nvim",
         opts = function ()
-          return require'config.various'.gitsigns
+          return require"config.various".gitsigns
         end,
         config = function (_, opts)
-          require('gitsigns').setup(opts)
+          require("gitsigns").setup(opts)
         end
       },
     },
     config = function ()
-      require'config.heirconf'
+      require"config.heirconf"
     end
   }
   -- =======================================
@@ -199,6 +194,6 @@ local plugins = {
 
 -- =======================================
 -- Init --
-local lazy_config = require'config.various'.lazy_nvim
-require('lazy').setup(plugins, lazy_config)
+local lazy_config = require"config.various".lazy_nvim
+require("lazy").setup(plugins, lazy_config)
 -- =======================================
